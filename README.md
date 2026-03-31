@@ -1,13 +1,12 @@
-# MiningOps Capsule Demo
+# MiningOps QA Demo
 
-Public QA demo for a simple 3D `Capsule` object rendered in a controlled scene.
+This repository is the public QA surface for MiningOps 3D previews.
 
-## Object
+## Current QA asset
 
-- Position: `0, 0, 0`
-- Rotation: `0, 0, 0`
-- Scale: `1, 1, 1`
+- Teletrasporto Cilindro
 
 ## Pages
 
-This repository publishes `site/` through GitHub Pages.
+- QA root: https://jjuri-socialmining.github.io/miningops-capsule-demo/
+- QA asset: https://jjuri-socialmining.github.io/miningops-capsule-demo/teletrasporto-cilindro.html
