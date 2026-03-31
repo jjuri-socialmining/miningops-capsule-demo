@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Adsorption Circuit Concept V2</title>
+  <style>
+    :root {
+      --bg: #ede8de;
+      --panel: rgba(255, 251, 245, 0.92);
+      --text: #1f2933;
+      --muted: #52606d;
+      --line: rgba(31, 41, 51, 0.12);
+      --accent: #8b5e1a;
+      --accent-strong: #5f3f11;
+      --shadow: 0 24px 70px rgba(31, 41, 51, 0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--text);
+      font-family: "Iowan Old Style", Georgia, "Times New Roman", serif;
+      background:
+        radial-gradient(circle at top left, rgba(139, 94, 26, 0.16), transparent 24%),
+        linear-gradient(180deg, #f7f3ea 0%, var(--bg) 100%);
+    }
+
+    main {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: minmax(300px, 390px) 1fr;
+    }
+
+    .panel {
+      padding: 1.8rem 1.5rem;
+      border-right: 1px solid var(--line);
+      background: var(--panel);
+      backdrop-filter: blur(10px);
+      box-shadow: var(--shadow);
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      gap: 1.1rem;
+    }
+
+    .viewer-wrap {
+      position: relative;
+      min-height: 100vh;
+    }
+
+    model-viewer {
+      width: 100%;
+      height: 100vh;
+      background:
+        radial-gradient(circle at 50% 40%, rgba(255, 255, 255, 0.95), rgba(225, 221, 214, 0.98));
+      --progress-bar-color: var(--accent);
+      --poster-color: transparent;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2.1rem, 4vw, 3rem);
+      line-height: 0.95;
+      letter-spacing: -0.05em;
+      max-width: 9ch;
+    }
+
+    p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 1.02rem;
+    }
+
+    ul {
+      margin: 0;
+      padding-left: 1.05rem;
+      max-width: 30ch;
+    }
+
+    li {
+      margin-bottom: 0.55rem;
+      padding-left: 0.1rem;
+    }
+
+    code {
+      display: inline-block;
+      margin-top: 0.22rem;
+      padding: 0.2rem 0.42rem;
+      border-radius: 8px;
+      background: rgba(31, 41, 51, 0.06);
+      border: 1px solid rgba(31, 41, 51, 0.05);
+      font-size: 0.84rem;
+      line-height: 1.4;
+      white-space: normal;
+      overflow-wrap: anywhere;
+      word-break: break-word;
+    }
+
+    .pill {
+      display: inline-block;
+      padding: 0.38rem 0.7rem;
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent-strong) 100%);
+      color: white;
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      align-self: flex-start;
+      box-shadow: 0 8px 18px rgba(95, 63, 17, 0.24);
+    }
+
+    .status {
+      padding: 0.85rem 0.95rem;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.78);
+      color: var(--text);
+      max-width: 100%;
+      font-size: 1rem;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.75);
+    }
+
+    .meta {
+      display: flex;
+      flex-direction: column;
+      gap: 0.95rem;
+      padding: 0.15rem 0 0.1rem;
+    }
+
+    .specs {
+      padding: 1rem 1rem 0.8rem;
+      border: 1px solid rgba(31, 41, 51, 0.08);
+      border-radius: 18px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.72) 0%, rgba(246, 243, 239, 0.9) 100%);
+    }
+
+    .specs-title {
+      margin: 0 0 0.65rem;
+      font-size: 0.84rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    @media (max-width: 900px) {
+      main {
+        grid-template-columns: 1fr;
+      }
+
+      .panel {
+        border-right: none;
+        border-bottom: 1px solid var(--line);
+        padding: 1.25rem 1.1rem;
+      }
+
+      model-viewer {
+        height: calc(100vh - 340px);
+      }
+    }
+  </style>
+  <script type="module" src="./vendor/model-viewer/model-viewer.min.js"></script>
+</head>
+<body>
+  <main>
+    <aside class="panel">
+      <div class="pill">QA Asset Preview</div>
+      <div class="meta">
+        <h1>Adsorption Circuit Concept V2</h1>
+        <p>Conceptual GLB viewer for QA review of the adsorption circuit layout, platforms and piping envelope.</p>
+        <div class="specs">
+          <div class="specs-title">Viewer Notes</div>
+          <ul>
+            <li>Model: <code>site/assets/models/adsorption_circuit_concept_v2.glb</code></li>
+            <li>Interaction: drag to orbit, scroll to zoom</li>
+            <li>Goal: verify conceptual geometry, composition and loading in QA</li>
+          </ul>
+        </div>
+      </div>
+      <div class="status" id="status">Loading model...</div>
+    </aside>
+
+    <section class="viewer-wrap">
+      <model-viewer
+        id="viewer"
+        src="./assets/models/adsorption_circuit_concept_v2.glb"
+        alt="Adsorption Circuit Concept V2"
+        camera-controls
+        touch-action="pan-y"
+        auto-rotate
+        shadow-intensity="1"
+        shadow-softness="0.8"
+        exposure="1.05"
+        environment-image="neutral"
+        camera-orbit="35deg 68deg 190%"
+        min-camera-orbit="auto auto 80%"
+        max-camera-orbit="auto auto 320%"
+        interaction-prompt="auto">
+      </model-viewer>
+    </section>
+  </main>
+
+  <script>
+    const viewer = document.getElementById("viewer");
+    const status = document.getElementById("status");
+
+    viewer.addEventListener("load", () => {
+      status.textContent = "Model loaded successfully.";
+    });
+
+    viewer.addEventListener("error", (event) => {
+      console.error(event);
+      status.textContent = "Model failed to load.";
+    });
+  </script>
+</body>
+</html>
