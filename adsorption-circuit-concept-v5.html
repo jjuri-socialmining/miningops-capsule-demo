@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Adsorption Circuit Concept V5</title>
+  <style>
+    :root {
+      --bg: #ede2d2;
+      --panel: rgba(255, 250, 243, 0.95);
+      --text: #1f2933;
+      --muted: #52606d;
+      --line: rgba(31, 41, 51, 0.12);
+      --accent: #8c431d;
+      --accent-strong: #612b11;
+      --shadow: 0 24px 70px rgba(31, 41, 51, 0.12);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--text);
+      font-family: "Iowan Old Style", Georgia, "Times New Roman", serif;
+      background:
+        radial-gradient(circle at top left, rgba(140, 67, 29, 0.17), transparent 25%),
+        linear-gradient(180deg, #f8f0e5 0%, var(--bg) 100%);
+    }
+
+    main {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: minmax(300px, 420px) 1fr;
+    }
+
+    .panel {
+      padding: 1.8rem 1.5rem;
+      border-right: 1px solid var(--line);
+      background: var(--panel);
+      backdrop-filter: blur(10px);
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 1.1rem;
+      z-index: 2;
+    }
+
+    .viewer-wrap {
+      min-height: 100vh;
+    }
+
+    model-viewer {
+      width: 100%;
+      height: 100vh;
+      background:
+        radial-gradient(circle at 52% 38%, rgba(255, 255, 255, 0.97), rgba(228, 222, 214, 0.99));
+      --progress-bar-color: var(--accent);
+      --poster-color: transparent;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2.1rem, 4vw, 3rem);
+      line-height: 0.95;
+      letter-spacing: -0.05em;
+      max-width: 10ch;
+    }
+
+    p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 1.02rem;
+    }
+
+    ul {
+      margin: 0;
+      padding-left: 1.05rem;
+      max-width: 34ch;
+    }
+
+    li {
+      margin-bottom: 0.55rem;
+    }
+
+    code {
+      display: inline-block;
+      margin-top: 0.22rem;
+      padding: 0.2rem 0.42rem;
+      border-radius: 8px;
+      background: rgba(31, 41, 51, 0.06);
+      border: 1px solid rgba(31, 41, 51, 0.05);
+      font-size: 0.84rem;
+      line-height: 1.4;
+      white-space: normal;
+      overflow-wrap: anywhere;
+      word-break: break-word;
+    }
+
+    .pill {
+      display: inline-block;
+      padding: 0.38rem 0.7rem;
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent-strong) 100%);
+      color: white;
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      align-self: flex-start;
+      box-shadow: 0 8px 18px rgba(97, 43, 17, 0.24);
+    }
+
+    .status, .specs {
+      padding: 0.95rem 1rem;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.82);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.75);
+    }
+
+    .specs-title {
+      margin: 0 0 0.65rem;
+      font-size: 0.84rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    @media (max-width: 900px) {
+      main { grid-template-columns: 1fr; }
+      .panel {
+        border-right: none;
+        border-bottom: 1px solid var(--line);
+        padding: 1.25rem 1.1rem;
+      }
+      model-viewer { height: calc(100vh - 420px); }
+    }
+  </style>
+  <script type="module" src="./vendor/model-viewer/model-viewer.min.js"></script>
+</head>
+<body>
+  <main>
+    <aside class="panel">
+      <div class="pill">Drawing-Based V5</div>
+      <h1>Adsorption Circuit Concept V5</h1>
+      <p>QA viewer for the nozzle-aware interpretation with explicit `N1..N6` placeholders, connected headers, corrected process continuity and a stronger left-side subsystem.</p>
+      <div class="specs">
+        <div class="specs-title">V5 Highlights</div>
+        <ul>
+          <li>Model: <code>site/assets/models/adsorption_circuit_concept_v5.glb</code></li>
+          <li>Five columns with `N1..N6`, central tube, channel and manhole cues</li>
+          <li>Upper process header, lower front header, drain header and channel header tied to nozzle points</li>
+          <li>Improved left-side wash tower, stack, fan and auxiliary block continuity</li>
+        </ul>
+      </div>
+      <div class="status" id="status">Loading model...</div>
+    </aside>
+
+    <section class="viewer-wrap">
+      <model-viewer
+        id="viewer"
+        src="./assets/models/adsorption_circuit_concept_v5.glb"
+        alt="Adsorption Circuit Concept V5"
+        camera-controls
+        touch-action="pan-y"
+        auto-rotate
+        shadow-intensity="1"
+        shadow-softness="0.8"
+        exposure="1.05"
+        environment-image="neutral"
+        camera-orbit="30deg 70deg 235%"
+        min-camera-orbit="auto auto 95%"
+        max-camera-orbit="auto auto 390%"
+        interaction-prompt="auto">
+      </model-viewer>
+    </section>
+  </main>
+
+  <script>
+    const viewer = document.getElementById("viewer");
+    const status = document.getElementById("status");
+
+    viewer.addEventListener("load", () => {
+      status.textContent = "Model loaded successfully.";
+    });
+
+    viewer.addEventListener("error", (event) => {
+      console.error(event);
+      status.textContent = "Model failed to load.";
+    });
+  </script>
+</body>
+</html>
