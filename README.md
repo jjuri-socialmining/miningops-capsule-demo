@@ -4,9 +4,9 @@ This repository is the public QA surface for MiningOps 3D previews.
 
 ## Current QA asset
 
-- Adsorption Circuit Concept V3
+- Adsorption Circuit Concept V4
 
 ## Pages
 
 - QA root: https://jjuri-socialmining.github.io/miningops-capsule-demo/
-- QA asset: https://jjuri-socialmining.github.io/miningops-capsule-demo/adsorption-circuit-concept-v3.html
+- QA asset: https://jjuri-socialmining.github.io/miningops-capsule-demo/adsorption-circuit-concept-v4.html
