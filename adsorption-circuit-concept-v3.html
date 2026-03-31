@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Adsorption Circuit Concept V3</title>
+  <style>
+    :root {
+      --bg: #efe6db;
+      --panel: rgba(255, 249, 242, 0.94);
+      --text: #1f2933;
+      --muted: #52606d;
+      --line: rgba(31, 41, 51, 0.12);
+      --accent: #9a4f2d;
+      --accent-strong: #6d351d;
+      --shadow: 0 24px 70px rgba(31, 41, 51, 0.12);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--text);
+      font-family: "Iowan Old Style", Georgia, "Times New Roman", serif;
+      background:
+        radial-gradient(circle at top left, rgba(154, 79, 45, 0.16), transparent 26%),
+        linear-gradient(180deg, #f8f2ea 0%, var(--bg) 100%);
+    }
+
+    main {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: minmax(300px, 390px) 1fr;
+    }
+
+    .panel {
+      padding: 1.8rem 1.5rem;
+      border-right: 1px solid var(--line);
+      background: var(--panel);
+      backdrop-filter: blur(10px);
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 1.1rem;
+      z-index: 2;
+    }
+
+    .viewer-wrap {
+      min-height: 100vh;
+    }
+
+    model-viewer {
+      width: 100%;
+      height: 100vh;
+      background:
+        radial-gradient(circle at 50% 40%, rgba(255, 255, 255, 0.96), rgba(231, 225, 218, 0.98));
+      --progress-bar-color: var(--accent);
+      --poster-color: transparent;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2.1rem, 4vw, 3rem);
+      line-height: 0.95;
+      letter-spacing: -0.05em;
+      max-width: 9ch;
+    }
+
+    p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 1.02rem;
+    }
+
+    ul {
+      margin: 0;
+      padding-left: 1.05rem;
+      max-width: 32ch;
+    }
+
+    li {
+      margin-bottom: 0.55rem;
+    }
+
+    code {
+      display: inline-block;
+      margin-top: 0.22rem;
+      padding: 0.2rem 0.42rem;
+      border-radius: 8px;
+      background: rgba(31, 41, 51, 0.06);
+      border: 1px solid rgba(31, 41, 51, 0.05);
+      font-size: 0.84rem;
+      line-height: 1.4;
+      white-space: normal;
+      overflow-wrap: anywhere;
+      word-break: break-word;
+    }
+
+    .pill {
+      display: inline-block;
+      padding: 0.38rem 0.7rem;
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent-strong) 100%);
+      color: white;
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      align-self: flex-start;
+      box-shadow: 0 8px 18px rgba(109, 53, 29, 0.24);
+    }
+
+    .status, .specs {
+      padding: 0.95rem 1rem;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.8);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.75);
+    }
+
+    .specs-title {
+      margin: 0 0 0.65rem;
+      font-size: 0.84rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    @media (max-width: 900px) {
+      main { grid-template-columns: 1fr; }
+      .panel {
+        border-right: none;
+        border-bottom: 1px solid var(--line);
+        padding: 1.25rem 1.1rem;
+      }
+      model-viewer { height: calc(100vh - 360px); }
+    }
+  </style>
+  <script type="module" src="./vendor/model-viewer/model-viewer.min.js"></script>
+</head>
+<body>
+  <main>
+    <aside class="panel">
+      <div class="pill">Drawing-Based V3</div>
+      <h1>Adsorption Circuit Concept V3</h1>
+      <p>Conceptual QA viewer rebuilt from plant, elevation, sections and technical data-sheet references.</p>
+      <div class="specs">
+        <div class="specs-title">V3 Highlights</div>
+        <ul>
+          <li>Model: <code>site/assets/models/adsorption_circuit_concept_v3.glb</code></li>
+          <li>Real stepped column heights from HD-01 to HD-05</li>
+          <li>Stepped platforms and side manifold routing</li>
+          <li>Left-side stack and duct system included</li>
+        </ul>
+      </div>
+      <div class="status" id="status">Loading model...</div>
+    </aside>
+
+    <section class="viewer-wrap">
+      <model-viewer
+        id="viewer"
+        src="./assets/models/adsorption_circuit_concept_v3.glb"
+        alt="Adsorption Circuit Concept V3"
+        camera-controls
+        touch-action="pan-y"
+        auto-rotate
+        shadow-intensity="1"
+        shadow-softness="0.8"
+        exposure="1.05"
+        environment-image="neutral"
+        camera-orbit="35deg 72deg 220%"
+        min-camera-orbit="auto auto 90%"
+        max-camera-orbit="auto auto 360%"
+        interaction-prompt="auto">
+      </model-viewer>
+    </section>
+  </main>
+
+  <script>
+    const viewer = document.getElementById("viewer");
+    const status = document.getElementById("status");
+
+    viewer.addEventListener("load", () => {
+      status.textContent = "Model loaded successfully.";
+    });
+
+    viewer.addEventListener("error", (event) => {
+      console.error(event);
+      status.textContent = "Model failed to load.";
+    });
+  </script>
+</body>
+</html>
