@@ -4,7 +4,7 @@ This repository is the public QA surface for MiningOps 3D previews.
 
 ## Current QA asset
 
-- Teletrasporto Cilindro
+- Teletrasporto Cilindro 12
 
 ## Pages
 
