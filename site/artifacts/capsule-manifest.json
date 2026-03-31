@@ -1,0 +1,36 @@
+{
+  "artifactId": "capsule-demo-001-dev",
+  "assetId": "capsule-demo-001",
+  "assetType": "primitive-capsule",
+  "environment": "dev",
+  "sourceOfTruth": "/Volumes/Storage/PKM/MiningOps/examples/capsule/capsule.asset.json",
+  "object": {
+    "primitive": "Capsule",
+    "position": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
+    "rotation": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
+    "scale": {
+      "x": 1,
+      "y": 1,
+      "z": 1
+    }
+  },
+  "qa": {
+    "localScene": "site/capsule.html",
+    "githubPagesPath": "/site/capsule.html"
+  },
+  "prod": {
+    "target": "https://framevr.io/",
+    "roomSlug": "capsule-demo-room",
+    "mode": "planned"
+  },
+  "generatedAt": "2026-03-31T01:07:25.485Z",
+  "dryRun": true
+}

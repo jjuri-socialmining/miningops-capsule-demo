@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MiningOps Capsule Sandbox</title>
+  <style>
+    :root {
+      --bg-top: #f8f4ea;
+      --bg-bottom: #d9e2d0;
+      --panel: rgba(255, 255, 255, 0.7);
+      --text: #1f2933;
+      --muted: #52606d;
+      --line: rgba(31, 41, 51, 0.14);
+      --accent: #a63d40;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      overflow: hidden;
+      color: var(--text);
+      font-family: Georgia, "Times New Roman", serif;
+      background:
+        radial-gradient(circle at top right, rgba(166, 61, 64, 0.18), transparent 26%),
+        linear-gradient(180deg, var(--bg-top) 0%, var(--bg-bottom) 100%);
+    }
+
+    #app {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+    }
+
+    canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    .hud {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      width: min(360px, calc(100vw - 40px));
+      padding: 1rem 1.1rem;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: var(--panel);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 18px 50px rgba(31, 41, 51, 0.1);
+    }
+
+    h1 {
+      margin: 0 0 0.5rem;
+      font-size: 1.8rem;
+      line-height: 1.05;
+    }
+
+    p {
+      margin: 0 0 0.75rem;
+      color: var(--muted);
+    }
+
+    ul {
+      margin: 0;
+      padding-left: 1rem;
+    }
+
+    li {
+      margin-bottom: 0.35rem;
+    }
+
+    code {
+      padding: 0.1rem 0.25rem;
+      border-radius: 6px;
+      background: rgba(31, 41, 51, 0.06);
+    }
+
+    .pill {
+      display: inline-block;
+      margin-top: 0.25rem;
+      padding: 0.28rem 0.55rem;
+      border-radius: 999px;
+      color: white;
+      background: var(--accent);
+      font-size: 0.86rem;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <div class="hud">
+      <div class="pill">Controlled Scene</div>
+      <h1>Capsule 3D</h1>
+      <p>Object created with the transform values visible in the reference image.</p>
+      <ul>
+        <li>Position: <code>0, 0, 0</code></li>
+        <li>Rotation: <code>0, 0, 0</code></li>
+        <li>Scale: <code>1, 1, 1</code></li>
+      </ul>
+    </div>
+  </div>
+
+  <script type="module">
+    import * as THREE from "https://unpkg.com/three@0.177.0/build/three.module.js";
+    import { OrbitControls } from "https://unpkg.com/three@0.177.0/examples/jsm/controls/OrbitControls.js";
+
+    const app = document.getElementById("app");
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color("#efe7d9");
+    scene.fog = new THREE.Fog("#efe7d9", 10, 28);
+
+    const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 100);
+    camera.position.set(4.5, 3.6, 6.5);
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
+    renderer.shadowMap.enabled = true;
+    app.appendChild(renderer.domElement);
+
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.target.set(0, 1, 0);
+
+    const ambientLight = new THREE.HemisphereLight("#fff8ea", "#7d8f69", 1.15);
+    scene.add(ambientLight);
+
+    const keyLight = new THREE.DirectionalLight("#fff7dd", 1.6);
+    keyLight.position.set(5, 8, 4);
+    keyLight.castShadow = true;
+    keyLight.shadow.mapSize.set(1024, 1024);
+    scene.add(keyLight);
+
+    const ground = new THREE.Mesh(
+      new THREE.CircleGeometry(8, 64),
+      new THREE.MeshStandardMaterial({
+        color: "#d5dfca",
+        roughness: 0.95,
+        metalness: 0
+      })
+    );
+    ground.rotation.x = -Math.PI / 2;
+    ground.receiveShadow = true;
+    scene.add(ground);
+
+    const grid = new THREE.GridHelper(12, 12, "#1f2933", "#6b7a8c");
+    grid.position.y = 0.001;
+    grid.material.opacity = 0.26;
+    grid.material.transparent = true;
+    scene.add(grid);
+
+    const axes = new THREE.AxesHelper(2.8);
+    scene.add(axes);
+
+    const capsule = new THREE.Mesh(
+      new THREE.CapsuleGeometry(0.65, 1.8, 10, 18),
+      new THREE.MeshStandardMaterial({
+        color: "#b6494c",
+        roughness: 0.35,
+        metalness: 0.08
+      })
+    );
+    capsule.castShadow = true;
+    capsule.receiveShadow = true;
+
+    capsule.position.set(0, 0, 0);
+    capsule.rotation.set(0, 0, 0);
+    capsule.scale.set(1, 1, 1);
+
+    scene.add(capsule);
+
+    const animate = () => {
+      controls.update();
+      renderer.render(scene, camera);
+      requestAnimationFrame(animate);
+    };
+
+    animate();
+
+    window.addEventListener("resize", () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+  </script>
+</body>
+</html>
