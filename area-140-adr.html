@@ -1,0 +1,561 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Fenix Gold Área 140 ADR</title>
+  <style>
+    :root {
+      --bg-top: #f6f0e7;
+      --bg-bottom: #dfe7eb;
+      --panel: rgba(255, 252, 247, 0.92);
+      --line: rgba(23, 33, 41, 0.14);
+      --text: #182128;
+      --muted: #4c5d68;
+      --accent: #8f5a2a;
+      --accent-strong: #5c3716;
+      --steel: #708090;
+      --grid: rgba(59, 78, 90, 0.24);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      overflow: hidden;
+      color: var(--text);
+      font-family: "Iowan Old Style", Georgia, "Times New Roman", serif;
+      background:
+        radial-gradient(circle at top left, rgba(143, 90, 42, 0.16), transparent 27%),
+        linear-gradient(180deg, var(--bg-top) 0%, var(--bg-bottom) 100%);
+    }
+
+    #app {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+    }
+
+    canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    .panel {
+      position: absolute;
+      top: 18px;
+      left: 18px;
+      width: min(420px, calc(100vw - 36px));
+      padding: 1.2rem 1.2rem 1rem;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: var(--panel);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 22px 55px rgba(18, 27, 34, 0.12);
+      z-index: 2;
+    }
+
+    .pill {
+      display: inline-block;
+      margin-bottom: 0.6rem;
+      padding: 0.36rem 0.72rem;
+      border-radius: 999px;
+      color: #fff;
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent-strong) 100%);
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0 0 0.5rem;
+      font-size: clamp(2rem, 3.8vw, 3rem);
+      line-height: 0.96;
+      letter-spacing: -0.05em;
+      max-width: 11ch;
+    }
+
+    p {
+      margin: 0 0 0.75rem;
+      color: var(--muted);
+    }
+
+    .section {
+      margin-top: 0.9rem;
+      padding-top: 0.9rem;
+      border-top: 1px solid var(--line);
+    }
+
+    .section-title {
+      margin: 0 0 0.45rem;
+      color: var(--accent);
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    ul {
+      margin: 0;
+      padding-left: 1rem;
+    }
+
+    li {
+      margin-bottom: 0.35rem;
+      color: var(--muted);
+    }
+
+    code {
+      padding: 0.12rem 0.32rem;
+      border-radius: 8px;
+      background: rgba(24, 33, 40, 0.06);
+    }
+
+    .status {
+      position: absolute;
+      right: 18px;
+      bottom: 18px;
+      max-width: min(360px, calc(100vw - 36px));
+      padding: 0.9rem 1rem;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(255, 252, 247, 0.88);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 18px 40px rgba(18, 27, 34, 0.11);
+      z-index: 2;
+    }
+
+    .status strong {
+      display: block;
+      margin-bottom: 0.18rem;
+      font-size: 0.82rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    @media (max-width: 880px) {
+      .panel {
+        width: min(100vw - 24px, 100%);
+        top: 12px;
+        left: 12px;
+        padding: 1rem;
+      }
+
+      .status {
+        left: 12px;
+        right: 12px;
+        bottom: 12px;
+        max-width: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <aside class="panel">
+      <div class="pill">Three.js Technical Scene</div>
+      <h1>Fenix Gold Área 140 ADR</h1>
+      <p>Escena paramétrica en metros para visualización técnica del tren de adsorción, plataformas y piping principal del Área 140.</p>
+
+      <div class="section">
+        <div class="section-title">Constantes</div>
+        <ul>
+          <li><code>DISTANCIA_EJES = 5.5</code></li>
+          <li><code>NTA_PLATAFORMA_1 = 6.66</code></li>
+          <li><code>NTA_PLATAFORMA_2 = 11.01</code></li>
+          <li><code>ALTURA_MAX_CHIMENEA = 26.9</code></li>
+        </ul>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Interacción</div>
+        <ul>
+          <li>Click sobre un equipo para registrar su TAG en consola.</li>
+          <li>Orbit controls activos para revisión técnica.</li>
+          <li>El origen <code>(0,0,0)</code> está centrado en la base de <code>140-CC-001</code>.</li>
+        </ul>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Suposiciones</div>
+        <ul>
+          <li>Se interpreta <code>y</code> como elevación global y <code>z</code> como avance longitudinal.</li>
+          <li>El cajón <code>140-BX-001</code> se ubica en <code>x = -5.5</code>, <code>z = 19.65</code>.</li>
+          <li>Las tuberías 16" se modelan como radio <code>0.2 m</code> para continuidad espacial.</li>
+        </ul>
+      </div>
+    </aside>
+
+    <div class="status" id="status">
+      <strong>Selección</strong>
+      <span id="status-text">Haz click en un equipo para ver su TAG.</span>
+    </div>
+  </div>
+
+  <script type="module">
+    import * as THREE from "./vendor/three/build/three.module.js";
+    import { OrbitControls } from "./vendor/three/examples/jsm/controls/OrbitControls.js";
+
+    const DISTANCIA_EJES = 5.5;
+    const NTC_PISO = 0.0;
+    const NTA_PLATAFORMA_1 = 6.66;
+    const NTA_PLATAFORMA_2 = 11.01;
+    const ALTURA_MAX_CHIMENEA = 26.9;
+
+    const COLUMN_RADIUS = 1.829;
+    const COLUMN_BODY_HEIGHT = 4.5;
+    const COLUMN_BASE_HEIGHT = 0.8;
+    const COLUMN_TOTAL_HEIGHT = COLUMN_BODY_HEIGHT + COLUMN_BASE_HEIGHT;
+    const PIPE_RADIUS = 0.2;
+
+    const COLUMN_COLOR = "#708090";
+    const VALVE_COLOR = "#9f4e2f";
+    const PLATFORM_COLOR = "#8fa3ad";
+    const PIPE_COLOR = "#697b84";
+    const FEED_BOX_COLOR = "#76624d";
+    const SCREEN_COLOR = "#9a8b63";
+    const STACK_COLOR = "#6f7e85";
+    const WASH_TOWER_COLOR = "#6e8796";
+
+    const app = document.getElementById("app");
+    const statusText = document.getElementById("status-text");
+
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color("#edf0ee");
+    scene.fog = new THREE.Fog("#edf0ee", 55, 140);
+
+    const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 250);
+    camera.position.set(24, 18, 36);
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    app.appendChild(renderer.domElement);
+
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.target.set(11, 5, 4);
+    controls.maxPolarAngle = Math.PI * 0.48;
+    controls.minDistance = 10;
+    controls.maxDistance = 120;
+
+    const ambient = new THREE.AmbientLight("#f7fbff", 1.6);
+    scene.add(ambient);
+
+    const sun = new THREE.DirectionalLight("#fff8ef", 2.2);
+    sun.position.set(12, 30, 10);
+    sun.castShadow = true;
+    sun.shadow.mapSize.set(2048, 2048);
+    sun.shadow.camera.near = 1;
+    sun.shadow.camera.far = 100;
+    sun.shadow.camera.left = -35;
+    sun.shadow.camera.right = 35;
+    sun.shadow.camera.top = 35;
+    sun.shadow.camera.bottom = -35;
+    scene.add(sun);
+
+    const fill = new THREE.DirectionalLight("#c3d3de", 0.75);
+    fill.position.set(-18, 14, -12);
+    scene.add(fill);
+
+    const ground = new THREE.Mesh(
+      new THREE.PlaneGeometry(90, 70),
+      new THREE.MeshStandardMaterial({
+        color: "#d8ddd9",
+        roughness: 0.95,
+        metalness: 0.03
+      })
+    );
+    ground.rotation.x = -Math.PI / 2;
+    ground.receiveShadow = true;
+    scene.add(ground);
+
+    const grid = new THREE.GridHelper(90, 45, "#4a6170", "#8ca0aa");
+    grid.position.y = 0.01;
+    grid.material.opacity = 0.24;
+    grid.material.transparent = true;
+    scene.add(grid);
+
+    const axes = new THREE.AxesHelper(4);
+    scene.add(axes);
+
+    const selectable = [];
+
+    function makeStandardMaterial(color, overrides = {}) {
+      return new THREE.MeshStandardMaterial({
+        color,
+        roughness: 0.42,
+        metalness: 0.6,
+        ...overrides
+      });
+    }
+
+    function registerSelectable(object, tag) {
+      object.name = tag;
+      object.userData.tag = tag;
+      selectable.push(object);
+      return object;
+    }
+
+    function addColumn(index, x) {
+      const tag = `140-CC-00${index + 1}`;
+      const group = new THREE.Group();
+      group.name = tag;
+      group.position.set(x, 0, 0);
+
+      const base = new THREE.Mesh(
+        new THREE.CylinderGeometry(COLUMN_RADIUS, COLUMN_RADIUS * 0.82, COLUMN_BASE_HEIGHT, 40, 1, false),
+        makeStandardMaterial(COLUMN_COLOR, { roughness: 0.5 })
+      );
+      base.position.y = COLUMN_BASE_HEIGHT / 2;
+      base.castShadow = true;
+      base.receiveShadow = true;
+      group.add(registerSelectable(base, tag));
+
+      const body = new THREE.Mesh(
+        new THREE.CylinderGeometry(COLUMN_RADIUS, COLUMN_RADIUS, COLUMN_BODY_HEIGHT, 48),
+        makeStandardMaterial(COLUMN_COLOR)
+      );
+      body.position.y = COLUMN_BASE_HEIGHT + COLUMN_BODY_HEIGHT / 2;
+      body.castShadow = true;
+      body.receiveShadow = true;
+      group.add(registerSelectable(body, tag));
+
+      const topRing = new THREE.Mesh(
+        new THREE.TorusGeometry(COLUMN_RADIUS * 1.01, 0.07, 12, 48),
+        makeStandardMaterial("#55626b", { metalness: 0.72, roughness: 0.35 })
+      );
+      topRing.rotation.x = Math.PI / 2;
+      topRing.position.y = COLUMN_TOTAL_HEIGHT;
+      group.add(registerSelectable(topRing, tag));
+
+      scene.add(group);
+
+      return {
+        tag,
+        x,
+        top: new THREE.Vector3(x, COLUMN_TOTAL_HEIGHT - 0.2, 0),
+        base: new THREE.Vector3(x, COLUMN_BASE_HEIGHT * 0.55, 0),
+      };
+    }
+
+    function addValve(index, x, z = 0) {
+      const tag = `140-DR-00${index + 1}`;
+      const valve = new THREE.Mesh(
+        new THREE.BoxGeometry(0.8, 1.2, 0.8),
+        makeStandardMaterial(VALVE_COLOR, { roughness: 0.35, metalness: 0.48 })
+      );
+      valve.position.set(x, NTA_PLATAFORMA_1, z);
+      valve.castShadow = true;
+      valve.receiveShadow = true;
+      scene.add(registerSelectable(valve, tag));
+      return valve.position.clone();
+    }
+
+    function addPlatform(level, depth, tag) {
+      const platformGroup = new THREE.Group();
+      platformGroup.name = tag;
+
+      const deck = new THREE.Mesh(
+        new THREE.PlaneGeometry(31, depth),
+        new THREE.MeshStandardMaterial({
+          color: PLATFORM_COLOR,
+          metalness: 0.58,
+          roughness: 0.5,
+          transparent: true,
+          opacity: 0.32,
+          side: THREE.DoubleSide
+        })
+      );
+      deck.rotation.x = -Math.PI / 2;
+      deck.position.set(11, level, 3.5);
+      deck.receiveShadow = true;
+      platformGroup.add(registerSelectable(deck, tag));
+
+      const perimeter = new THREE.LineSegments(
+        new THREE.EdgesGeometry(new THREE.BoxGeometry(31, 0.08, depth)),
+        new THREE.LineBasicMaterial({ color: "#4d6672", transparent: true, opacity: 0.7 })
+      );
+      perimeter.position.set(11, level + 0.04, 3.5);
+      platformGroup.add(perimeter);
+
+      scene.add(platformGroup);
+    }
+
+    function addPipeSegment(start, end, tag) {
+      const direction = new THREE.Vector3().subVectors(end, start);
+      const length = direction.length();
+      if (length < 1e-4) {
+        return;
+      }
+
+      const pipe = new THREE.Mesh(
+        new THREE.CylinderGeometry(PIPE_RADIUS, PIPE_RADIUS, length, 18),
+        makeStandardMaterial(PIPE_COLOR, { roughness: 0.3, metalness: 0.7 })
+      );
+      pipe.castShadow = true;
+      pipe.receiveShadow = true;
+      pipe.position.copy(start).add(end).multiplyScalar(0.5);
+      pipe.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), direction.clone().normalize());
+      scene.add(registerSelectable(pipe, tag));
+    }
+
+    function addPipeRun(points, tag) {
+      for (let index = 0; index < points.length - 1; index += 1) {
+        addPipeSegment(points[index], points[index + 1], tag);
+      }
+    }
+
+    function addScreen(tag, x, z, angleDeg) {
+      const screen = new THREE.Mesh(
+        new THREE.BoxGeometry(3, 1, 1.5),
+        makeStandardMaterial(SCREEN_COLOR, { roughness: 0.52, metalness: 0.48 })
+      );
+      screen.position.set(x, NTA_PLATAFORMA_2 + 0.85, z);
+      screen.rotation.z = THREE.MathUtils.degToRad(angleDeg);
+      screen.castShadow = true;
+      screen.receiveShadow = true;
+      scene.add(registerSelectable(screen, tag));
+    }
+
+    function addFeedBox() {
+      const box = new THREE.Mesh(
+        new THREE.BoxGeometry(3.2, 2.6, 2.2),
+        makeStandardMaterial(FEED_BOX_COLOR, { roughness: 0.62, metalness: 0.22 })
+      );
+      box.position.set(-5.5, 1.3, 19.65);
+      box.castShadow = true;
+      box.receiveShadow = true;
+      scene.add(registerSelectable(box, "140-BX-001"));
+    }
+
+    function addWashTowerAndStack() {
+      const washTower = new THREE.Mesh(
+        new THREE.CylinderGeometry(1.2, 1.2, 10.4, 32),
+        makeStandardMaterial(WASH_TOWER_COLOR, { roughness: 0.38, metalness: 0.58 })
+      );
+      washTower.position.set(-5.5, 5.2, 14.5);
+      washTower.castShadow = true;
+      washTower.receiveShadow = true;
+      scene.add(registerSelectable(washTower, "140-WT-001"));
+
+      const stackHeight = ALTURA_MAX_CHIMENEA - 11.4;
+      const stack = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.5, 0.5, stackHeight, 28),
+        makeStandardMaterial(STACK_COLOR, { roughness: 0.34, metalness: 0.68 })
+      );
+      stack.position.set(-5.5, ALTURA_MAX_CHIMENEA - stackHeight / 2, 14.5);
+      stack.castShadow = true;
+      stack.receiveShadow = true;
+      scene.add(registerSelectable(stack, "140-CH-001"));
+    }
+
+    const columns = Array.from({ length: 5 }, (_, index) => addColumn(index, index * DISTANCIA_EJES));
+
+    addPlatform(NTA_PLATAFORMA_1, 10.5, "140-PLAT-01");
+    addPlatform(NTA_PLATAFORMA_2, 13.5, "140-PLAT-02");
+
+    const valvePositions = [
+      addValve(0, 2.75, 0.0),
+      addValve(1, 8.25, 0.0),
+      addValve(2, 13.75, 0.0),
+      addValve(3, 19.25, 0.0),
+      addValve(4, 5.5, 3.6),
+      addValve(5, 11.0, 3.6),
+      addValve(6, 16.5, 3.6),
+      addValve(7, 0.0, -3.6),
+      addValve(8, 22.0, -3.6),
+    ];
+
+    columns.slice(0, 4).forEach((column, index) => {
+      const nextColumn = columns[index + 1];
+      const valve = valvePositions[index];
+      addPipeRun(
+        [
+          new THREE.Vector3(column.x, column.top.y, 0.0),
+          new THREE.Vector3(column.x, NTA_PLATAFORMA_1, 0.0),
+          new THREE.Vector3(valve.x, NTA_PLATAFORMA_1, valve.z),
+          new THREE.Vector3(nextColumn.x, NTA_PLATAFORMA_1, 0.0),
+          new THREE.Vector3(nextColumn.x, nextColumn.base.y, 0.0),
+        ],
+        `140-P-CC-${String(index + 1).padStart(2, "0")}`
+      );
+    });
+
+    addPipeRun(
+      [
+        new THREE.Vector3(-5.5, 2.5, 19.65),
+        new THREE.Vector3(-5.5, NTA_PLATAFORMA_2, 19.65),
+        new THREE.Vector3(-5.5, NTA_PLATAFORMA_2, 4.5),
+        new THREE.Vector3(0.0, NTA_PLATAFORMA_2, 4.5),
+      ],
+      "140-P-FEED-001"
+    );
+
+    addPipeRun(
+      [
+        new THREE.Vector3(-5.5, 10.4, 14.5),
+        new THREE.Vector3(-5.5, 10.4, 4.2),
+        new THREE.Vector3(0.0, 10.4, 4.2),
+      ],
+      "140-P-VENT-001"
+    );
+
+    addScreen("140-SC-001A", 8.8, 7.5, -16);
+    addScreen("140-SC-001B", 13.4, 7.5, 16);
+    addFeedBox();
+    addWashTowerAndStack();
+
+    const markerMaterial = new THREE.MeshBasicMaterial({ color: "#14232c" });
+    columns.forEach((column) => {
+      const marker = new THREE.Mesh(new THREE.SphereGeometry(0.1, 12, 12), markerMaterial);
+      marker.position.set(column.x, NTC_PISO, 0);
+      scene.add(marker);
+    });
+
+    const raycaster = new THREE.Raycaster();
+    const pointer = new THREE.Vector2();
+
+    function onPointerDown(event) {
+      const rect = renderer.domElement.getBoundingClientRect();
+      pointer.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+      pointer.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+
+      raycaster.setFromCamera(pointer, camera);
+      const intersections = raycaster.intersectObjects(selectable, false);
+      if (!intersections.length) {
+        statusText.textContent = "Sin selección. Haz click sobre un equipo.";
+        return;
+      }
+
+      const hit = intersections[0].object;
+      const tag = hit.userData.tag || hit.name || "SIN-TAG";
+      console.log(tag);
+      statusText.textContent = `TAG seleccionado: ${tag}`;
+    }
+
+    renderer.domElement.addEventListener("pointerdown", onPointerDown);
+
+    function animate() {
+      controls.update();
+      renderer.render(scene, camera);
+      requestAnimationFrame(animate);
+    }
+
+    animate();
+
+    window.addEventListener("resize", () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+  </script>
+</body>
+</html>
